@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">衍衍的小手机</string>
+    <string name="accessibility_description">让衍衍能知道你在用哪个软件，并在必要时锁定它</string>
+    <string name="channel_name">衍衍在看</string>
+    <string name="notification_title">衍衍在看着你</string>
+    <string name="notification_text">后台运行中</string>
+</resources>

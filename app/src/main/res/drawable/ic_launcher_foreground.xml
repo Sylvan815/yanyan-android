@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- paw print for 衍衍 -->
+    <path
+        android:fillColor="#CBEAE6"
+        android:pathData="M54,42 C54,42 42,52 42,62 C42,70 47.6,76 54,76 C60.4,76 66,70 66,62 C66,52 54,42 54,42Z"/>
+    <path
+        android:fillColor="#297694"
+        android:pathData="M42,36 C42,33 44,31 46,31 C48,31 50,33 50,36 C50,39 48,41 46,41 C44,41 42,39 42,36Z"/>
+    <path
+        android:fillColor="#297694"
+        android:pathData="M58,36 C58,33 60,31 62,31 C64,31 66,33 66,36 C66,39 64,41 62,41 C60,41 58,39 58,36Z"/>
+    <path
+        android:fillColor="#297694"
+        android:pathData="M36,44 C36,41 38,39 40,39 C42,39 44,41 44,44 C44,47 42,49 40,49 C38,49 36,47 36,44Z"/>
+    <path
+        android:fillColor="#297694"
+        android:pathData="M64,44 C64,41 66,39 68,39 C70,39 72,41 72,44 C72,47 70,49 68,49 C66,49 64,47 64,44Z"/>
+</vector>

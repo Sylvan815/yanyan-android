@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#060f18"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gap="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="衍衍的小手机"
+            android:textColor="#CBEAE6"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- API设置 -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="API 设置" android:textColor="#AAD1D6" android:textSize="14sp"/>
+
+        <EditText android:id="@+id/et_api_url"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="API地址" android:textColorHint="#446677"
+            android:textColor="#CBEAE6" android:background="@drawable/input_bg"
+            android:padding="12dp" android:inputType="textUri"/>
+
+        <EditText android:id="@+id/et_api_key"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="API Key" android:textColorHint="#446677"
+            android:textColor="#CBEAE6" android:background="@drawable/input_bg"
+            android:padding="12dp" android:inputType="textPassword"/>
+
+        <EditText android:id="@+id/et_api_model"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="模型名称（如 deepseek-vl2）" android:textColorHint="#446677"
+            android:textColor="#CBEAE6" android:background="@drawable/input_bg"
+            android:padding="12dp"/>
+
+        <Button android:id="@+id/btn_save_api"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="保存API设置" android:backgroundTint="#297694"/>
+
+        <!-- 截图间隔 -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="查看间隔（秒）" android:textColor="#AAD1D6" android:textSize="14sp"
+            android:layout_marginTop="8dp"/>
+
+        <EditText android:id="@+id/et_interval"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="45" android:textColorHint="#446677"
+            android:textColor="#CBEAE6" android:background="@drawable/input_bg"
+            android:padding="12dp" android:inputType="number"/>
+
+        <!-- 开始/停止 -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gap="12dp">
+
+            <Button android:id="@+id/btn_start_watch"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="衍衍开始看" android:backgroundTint="#54AFBE"/>
+
+            <Button android:id="@+id/btn_stop_watch"
+                android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="停止" android:backgroundTint="#444"/>
+        </LinearLayout>
+
+        <!-- 锁软件 -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="锁定软件" android:textColor="#AAD1D6" android:textSize="14sp"
+            android:layout_marginTop="8dp"/>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical" android:gap="12dp">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="开启锁定" android:textColor="#CBEAE6"/>
+            <Switch android:id="@+id/sw_lock"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <EditText android:id="@+id/et_locked_apps"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="包名，逗号分隔，如 com.tencent.mm,com.ss.android.ugc.aweme"
+            android:textColorHint="#446677" android:textColor="#CBEAE6"
+            android:background="@drawable/input_bg" android:padding="12dp"
+            android:minLines="2"/>
+
+        <Button android:id="@+id/btn_save_lock"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="保存锁定设置" android:backgroundTint="#297694"/>
+
+        <Button android:id="@+id/btn_accessibility"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="开启无障碍服务（锁软件必须）" android:backgroundTint="#1a3a4a"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
+</ScrollView>

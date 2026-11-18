@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.YanYan" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">#297694</item>
+        <item name="colorPrimaryVariant">#0d2233</item>
+        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorSecondary">#54AFBE</item>
+        <item name="android:statusBarColor">#0d2233</item>
+    </style>
+</resources>
