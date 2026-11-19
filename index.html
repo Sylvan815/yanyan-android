@@ -4,54 +4,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="衍衍">
 <title>衍衍的小手机</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+SC:wght@300;400&family=Noto+Sans+SC:wght@300;400&display=swap">
 <style>
 :root {
-  --bg: #07101e;
-  --glass: rgba(255,255,255,0.065);
-  --glass2: rgba(255,255,255,0.045);
-  --border: rgba(255,255,255,0.11);
-  --border2: rgba(255,255,255,0.07);
-  --fg: rgba(255,255,255,0.92);
-  --fg2: rgba(255,255,255,0.52);
-  --fg3: rgba(255,255,255,0.28);
-  --accent: #c4a0d6;
-  --accent2: #9ec8c4;
-  --pink: rgba(220,160,200,0.22);
+  --bg: #dce8e4;
+  --bg2: #cfdeda;
+  --glass: rgba(255,255,255,0.58);
+  --glass2: rgba(255,255,255,0.38);
+  --glassd: rgba(255,255,255,0.72);
+  --border: rgba(255,255,255,0.85);
+  --border2: rgba(180,210,200,0.45);
+  --fg: #1e2d2a;
+  --fg2: #4a6560;
+  --fg3: #8aaba4;
+  --accent: #5a9e94;
+  --accent2: #7bbfb0;
+  --accentl: #a8d8d0;
+  --pink: rgba(230,200,215,0.55);
+  --mintbubble: rgba(168,216,208,0.3);
   --tab: 68px;
-  color-scheme: dark;
+  color-scheme: light;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--fg);
-  font-family:'Noto Sans SC',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+html,body{
+  height:100%;overflow:hidden;
+  background:var(--bg);color:var(--fg);
+  font-family:'Noto Sans SC',system-ui,sans-serif;font-weight:300;
+  -webkit-font-smoothing:antialiased;
+}
 
-/* ── Background ── */
+/* ── Soft background ── */
 body::before{
   content:'';position:fixed;inset:0;z-index:0;
   background:
-    radial-gradient(ellipse 90% 70% at 15% 20%, rgba(90,70,150,0.14) 0%,transparent 55%),
-    radial-gradient(ellipse 70% 90% at 85% 75%, rgba(50,90,140,0.11) 0%,transparent 55%),
-    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(30,50,90,0.4) 0%,transparent 80%),
-    linear-gradient(165deg,#060d1c 0%,#0c1a30 45%,#080f1e 75%,#060b18 100%);
-  animation:bgBreath 14s ease-in-out infinite alternate;
+    radial-gradient(ellipse 100% 80% at 10% 0%, rgba(200,230,220,0.7) 0%,transparent 50%),
+    radial-gradient(ellipse 80% 60% at 90% 100%, rgba(185,220,210,0.5) 0%,transparent 50%),
+    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(220,235,230,0.4) 0%,transparent 70%),
+    linear-gradient(160deg,#d4e8e0 0%,#ddeae5 35%,#cfdeda 65%,#d6e6df 100%);
+  animation:bgBreath 16s ease-in-out infinite alternate;
 }
 @keyframes bgBreath{
   0%{filter:hue-rotate(0deg) brightness(1)}
-  100%{filter:hue-rotate(18deg) brightness(1.04)}
+  100%{filter:hue-rotate(8deg) brightness(1.03)}
 }
 
-/* Floating petals / particles */
+/* Soft floating orbs */
 .particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
-.pt{position:absolute;border-radius:50%;animation:ptFloat linear infinite;opacity:0}
+.pt{position:absolute;border-radius:50%;filter:blur(1px);animation:ptFloat linear infinite;opacity:0}
 @keyframes ptFloat{
-  0%{transform:translateY(105vh) rotate(0deg);opacity:0}
-  8%{opacity:var(--op)}
-  92%{opacity:calc(var(--op)*0.5)}
-  100%{transform:translateY(-8vh) rotate(540deg);opacity:0}
+  0%{transform:translateY(105vh);opacity:0}
+  10%{opacity:var(--op)}90%{opacity:calc(var(--op)*.4)}
+  100%{transform:translateY(-8vh);opacity:0}
 }
 
 /* ── Shell ── */
@@ -60,8 +67,8 @@ body::before{
 /* ── Views ── */
 .view{
   flex:1;overflow:hidden;display:none;flex-direction:column;
-  opacity:0;transform:translateY(6px);
-  transition:opacity .22s ease,transform .22s ease;
+  opacity:0;transform:translateY(5px);
+  transition:opacity .22s,transform .22s;
   padding-bottom:var(--tab);
 }
 .view.active{display:flex;opacity:1;transform:translateY(0)}
@@ -76,96 +83,129 @@ body::before{
 /* ── Glass Card ── */
 .card{
   background:var(--glass);
-  backdrop-filter:blur(28px) saturate(150%);
-  -webkit-backdrop-filter:blur(28px) saturate(150%);
+  backdrop-filter:blur(28px) saturate(160%);
+  -webkit-backdrop-filter:blur(28px) saturate(160%);
   border:1px solid var(--border);
   border-radius:22px;overflow:hidden;
+  box-shadow:0 4px 24px rgba(90,158,148,.08),0 1px 4px rgba(90,158,148,.06);
 }
 
-/* ══════════════ HOME ══════════════ */
-#home .scroll{display:flex;flex-direction:column;gap:14px}
+/* ══════ HOME ══════ */
+#home .scroll{display:flex;flex-direction:column;gap:13px}
 
 .page-title{
   font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:30px;font-weight:300;letter-spacing:.02em;
+  font-size:30px;font-weight:300;letter-spacing:.02em;color:var(--fg);
   display:flex;align-items:baseline;justify-content:space-between;
   padding:6px 2px 2px;
 }
-.page-title span{font-family:'Noto Sans SC',sans-serif;font-style:normal;font-size:11px;color:var(--fg3);letter-spacing:.1em}
-
-/* Together Card */
-.tc{padding:28px 20px 24px;text-align:center;position:relative}
-.tc-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--fg3);margin-bottom:20px}
-.tc-avatars{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:22px}
-.av{
-  width:58px;height:58px;border-radius:50%;
-  border:1.5px solid var(--border);
-  display:flex;align-items:center;justify-content:center;font-size:22px;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+.page-title span{
+  font-family:'Noto Sans SC',sans-serif;font-style:normal;
+  font-size:11px;color:var(--fg3);letter-spacing:.1em;
 }
-.av.ya{background:linear-gradient(135deg,rgba(190,140,210,.28),rgba(140,100,180,.2))}
-.av.mo{background:linear-gradient(135deg,rgba(80,120,180,.28),rgba(60,100,150,.2))}
-.tc-heart{font-size:14px;color:#e8b4d0;animation:hb 2.6s ease-in-out infinite}
-@keyframes hb{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.25);opacity:1}}
+
+/* Together card — dark mint */
+.tc{
+  padding:26px 20px 22px;text-align:center;
+  background:linear-gradient(145deg,rgba(70,130,120,.82),rgba(50,105,100,.88));
+  border:1px solid rgba(100,170,160,.4);
+  box-shadow:0 6px 30px rgba(50,120,110,.2);
+}
+.tc-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(200,240,230,.55);margin-bottom:18px}
+.tc-avatars{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px}
+.av{
+  width:56px;height:56px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+}
+.av.ya{background:rgba(220,190,230,.22)}
+.av.mo{background:rgba(100,170,200,.22)}
+.tc-heart{font-size:14px;color:#f0c8d8;animation:hb 2.6s ease-in-out infinite}
+@keyframes hb{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.3);opacity:1}}
 .tc-num{
   font-family:'Cormorant Garamond',serif;font-weight:300;
-  font-size:78px;line-height:1;letter-spacing:-.03em;color:var(--fg);margin-bottom:6px;
+  font-size:76px;line-height:1;letter-spacing:-.03em;
+  color:#fff;margin-bottom:6px;
 }
-.tc-sub{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg3)}
-.tc-line{
-  margin:18px auto 0;width:90px;height:1.5px;
-  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
-  opacity:.45;
+.tc-sub{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(200,240,230,.55)}
+.tc-wave{
+  margin:16px auto 0;width:80px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(200,240,230,.5),transparent);
 }
+.tc-start{font-size:11px;color:rgba(200,240,230,.4);margin-top:8px;letter-spacing:.06em}
 
 /* Status card */
 .sc{padding:18px 20px}
 .sc-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
 .sc-av{
   width:42px;height:42px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,rgba(80,120,180,.35),rgba(60,100,150,.25));
-  border:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(90,158,148,.25),rgba(70,130,120,.2));
+  border:1px solid var(--border2);
   display:flex;align-items:center;justify-content:center;font-size:18px;
 }
-.sc-name{font-size:15px;font-family:'Noto Serif SC',serif;margin-bottom:3px}
-.sc-role{font-size:11px;color:var(--accent2);letter-spacing:.04em}
-.sc-quote{font-size:13px;line-height:1.85;color:var(--fg2);font-family:'Noto Serif SC',serif;font-style:italic}
+.sc-name{font-size:15px;font-family:'Noto Serif SC',serif;color:var(--fg);margin-bottom:3px}
+.sc-role{font-size:11px;color:var(--accent);letter-spacing:.04em}
+.sc-quote{font-size:13px;line-height:1.9;color:var(--fg2);font-family:'Noto Serif SC',serif;font-style:italic}
 
 /* Quick row */
 .qrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.qc{padding:18px 16px;cursor:pointer;transition:transform .15s,opacity .15s}
+.qc{padding:17px 16px;cursor:pointer;transition:transform .15s,opacity .15s}
 .qc:active{transform:scale(.96);opacity:.75}
-.qc-icon{font-size:22px;margin-bottom:9px;display:block}
+.qc-icon{font-size:21px;margin-bottom:8px;display:block}
 .qc-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg3);margin-bottom:3px}
 .qc-val{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--fg)}
 
-/* Moments */
-.mc{padding:18px 20px}
-.mc-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:var(--fg2);margin-bottom:14px}
-.me{display:flex;gap:12px;padding:11px 0;border-top:1px solid var(--border2)}
-.me:first-of-type{border-top:none}
-.me-time{font-size:11px;color:var(--fg3);white-space:nowrap;padding-top:2px;min-width:28px}
-.me-txt{font-size:13px;color:var(--fg2);line-height:1.75}
+/* Diary card */
+.dc{padding:18px 20px;position:relative;overflow:visible}
+.dc-accent{
+  position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,var(--accent2),var(--accentl));
+  border-radius:0 0 0 22px;
+}
+.dc-title{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:21px;color:var(--fg2);margin-bottom:4px;
+}
+.dc-date{font-size:11px;color:var(--fg3);letter-spacing:.06em;margin-bottom:12px}
+.dc-body{font-size:13px;color:var(--fg2);line-height:1.85}
+.dc-tag{
+  display:inline-block;margin-top:12px;
+  background:rgba(90,158,148,.12);border:1px solid rgba(90,158,148,.2);
+  border-radius:20px;padding:3px 10px;
+  font-size:11px;color:var(--accent);letter-spacing:.04em;
+}
+.dc-open{float:right;font-size:11px;color:var(--fg3);letter-spacing:.08em;text-transform:uppercase;margin-top:14px}
 
-/* ══════════════ CHAT ══════════════ */
+/* Mood row */
+.mood-card{padding:16px 20px}
+.mood-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.mood-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg3)}
+.mood-sub{font-size:11px;color:var(--accent2)}
+.mood-days{display:flex;gap:7px;align-items:center}
+.mood-day{display:flex;flex-direction:column;align-items:center;gap:5px}
+.mood-dname{font-size:10px;color:var(--fg3)}
+.mood-dot{width:28px;height:28px;border-radius:8px;border:1px solid var(--border2);background:var(--glass2);display:flex;align-items:center;justify-content:center;font-size:14px}
+.mood-dot.today{border-color:rgba(90,158,148,.35);background:rgba(90,158,148,.12)}
+
+/* ══════ CHAT ══════ */
 #chat{display:none;flex-direction:column}
 #chat.active{display:flex}
 
 .ch-header{
   flex-shrink:0;
   padding:calc(env(safe-area-inset-top,10px) + 10px) max(16px,env(safe-area-inset-left,0px)) 10px;
-  background:rgba(7,16,30,.72);
+  background:rgba(220,235,230,.82);
   backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
   border-bottom:1px solid var(--border2);
   display:flex;align-items:center;gap:12px;position:relative;z-index:5;
 }
 .ch-av{
   width:38px;height:38px;border-radius:50%;flex-shrink:0;
-  background:linear-gradient(135deg,rgba(80,120,180,.4),rgba(60,100,150,.3));
-  border:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(90,158,148,.3),rgba(70,130,120,.22));
+  border:1px solid var(--border2);
   display:flex;align-items:center;justify-content:center;font-size:16px;
 }
-.ch-name{font-size:15px;font-family:'Noto Serif SC',serif;margin-bottom:2px}
+.ch-name{font-size:15px;font-family:'Noto Serif SC',serif;color:var(--fg);margin-bottom:2px}
 .ch-online{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--fg3)}
 .odot{width:5px;height:5px;border-radius:50%;background:var(--accent2);flex-shrink:0;animation:pu 2.2s ease-in-out infinite}
 @keyframes pu{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
@@ -185,30 +225,33 @@ body::before{
 .mr.me{flex-direction:row-reverse}
 .mr-av{
   width:30px;height:30px;border-radius:50%;flex-shrink:0;margin-bottom:2px;
-  background:linear-gradient(135deg,rgba(80,120,180,.35),rgba(60,100,150,.25));
+  background:linear-gradient(135deg,rgba(90,158,148,.25),rgba(70,130,120,.18));
   border:1px solid var(--border2);
   display:flex;align-items:center;justify-content:center;font-size:12px;
 }
-.mr.me .mr-av{background:linear-gradient(135deg,rgba(190,140,210,.35),rgba(140,100,180,.25))}
+.mr.me .mr-av{background:linear-gradient(135deg,rgba(210,170,220,.25),rgba(180,140,195,.18))}
 .mr-wrap{display:flex;flex-direction:column;max-width:calc(100% - 44px)}
 .mr.me .mr-wrap{align-items:flex-end}
 .mr-name{font-size:10px;color:var(--fg3);margin-bottom:3px;padding:0 3px}
 .mr-bubble{
   padding:9px 13px;border-radius:17px;
   font-size:14px;line-height:1.68;color:var(--fg);word-break:break-word;
-  background:var(--glass);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  border:1px solid var(--border2);
+  background:var(--glassd);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--border);
+  box-shadow:0 2px 10px rgba(90,158,148,.07);
 }
-.mr.me .mr-bubble{background:var(--pink);border-color:rgba(210,150,190,.22)}
+.mr.me .mr-bubble{
+  background:var(--mintbubble);
+  border-color:rgba(90,158,148,.25);
+}
 .mr-time{font-size:10px;color:var(--fg3);margin-top:4px;padding:0 3px}
 .mr.me .mr-time{text-align:right}
 
 /* Typing */
 .typing-row .mr-bubble{display:flex;gap:5px;align-items:center;padding:12px 16px}
 .tdot{width:5px;height:5px;border-radius:50%;background:var(--fg3);animation:tb 1.4s ease-in-out infinite}
-.tdot:nth-child(2){animation-delay:.2s}
-.tdot:nth-child(3){animation-delay:.4s}
+.tdot:nth-child(2){animation-delay:.2s}.tdot:nth-child(3){animation-delay:.4s}
 @keyframes tb{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-5px);opacity:1}}
 
 /* Input */
@@ -217,92 +260,93 @@ body::before{
   padding:10px max(14px,env(safe-area-inset-left,0px));
   padding-right:max(14px,env(safe-area-inset-right,0px));
   padding-bottom:calc(var(--tab) + 6px + env(safe-area-inset-bottom,0px));
-  background:rgba(7,16,30,.72);
+  background:rgba(220,235,230,.82);
   backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
   border-top:1px solid var(--border2);
   display:flex;gap:9px;align-items:flex-end;
 }
 .plus-btn{
   width:34px;height:34px;border:none;background:none;color:var(--fg3);
-  font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  padding-bottom:1px;flex-shrink:0;
+  font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 #msgInput{
   flex:1;min-height:36px;max-height:96px;
-  border-radius:18px;background:var(--glass2);
-  border:1px solid var(--border2);
+  border-radius:18px;background:var(--glass);
+  border:1px solid var(--border);
   color:var(--fg);font-size:14px;font-family:'Noto Sans SC',sans-serif;font-weight:300;
   padding:7px 13px;resize:none;outline:none;line-height:1.5;
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   transition:border-color .2s;
+  box-shadow:0 2px 8px rgba(90,158,148,.08);
 }
 #msgInput::placeholder{color:var(--fg3)}
-#msgInput:focus{border-color:rgba(196,160,214,.3)}
+#msgInput:focus{border-color:rgba(90,158,148,.35)}
 #sendBtn{
   width:36px;height:36px;border-radius:50%;flex-shrink:0;
-  border:1px solid var(--border);
-  background:linear-gradient(135deg,rgba(196,160,214,.22),rgba(158,200,196,.18));
+  border:1px solid rgba(90,158,148,.3);
+  background:linear-gradient(135deg,rgba(90,158,148,.3),rgba(123,191,176,.25));
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   color:var(--fg);font-size:15px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 10px rgba(90,158,148,.12);
   transition:transform .15s,opacity .15s;
 }
 #sendBtn:active{transform:scale(.88);opacity:.75}
 
-/* ══════════════ SETTINGS ══════════════ */
-#settings .scroll{display:flex;flex-direction:column;gap:14px}
+/* ══════ SETTINGS ══════ */
+#settings .scroll{display:flex;flex-direction:column;gap:13px}
 .ss{padding:18px 20px}
 .ss-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg3);margin-bottom:14px}
 .sf{margin-bottom:13px}
 .sf label{display:block;font-size:11px;color:var(--fg3);margin-bottom:5px;letter-spacing:.05em}
-.sf input,.sf textarea,.sf select{
-  width:100%;background:rgba(0,0,0,.28);
-  border:1px solid var(--border2);border-radius:10px;
+.sf input,.sf textarea{
+  width:100%;background:rgba(255,255,255,.5);
+  border:1px solid var(--border);border-radius:10px;
   padding:9px 11px;color:var(--fg);font-size:13px;
   font-family:'Noto Sans SC',sans-serif;font-weight:300;outline:none;
   transition:border-color .2s;
 }
-.sf input:focus,.sf textarea:focus{border-color:rgba(196,160,214,.3)}
+.sf input:focus,.sf textarea:focus{border-color:rgba(90,158,148,.35)}
 .sf textarea{resize:vertical;min-height:76px;line-height:1.6}
 .sbtn{
   width:100%;padding:11px;border-radius:11px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,rgba(196,160,214,.18),rgba(158,200,196,.15));
-  border:1px solid var(--border);color:var(--fg);font-size:13px;
+  background:linear-gradient(135deg,rgba(90,158,148,.18),rgba(123,191,176,.14));
+  border:1px solid rgba(90,158,148,.25);color:var(--fg);font-size:13px;
   font-family:'Noto Sans SC',sans-serif;font-weight:300;letter-spacing:.04em;
   transition:transform .15s,opacity .15s;
 }
 .sbtn:active{transform:scale(.97);opacity:.8}
-.sbtn.danger{background:rgba(200,70,70,.12);border-color:rgba(200,70,70,.18)}
+.sbtn.danger{background:rgba(200,80,80,.08);border-color:rgba(200,80,80,.2)}
 
-/* ══════════════ NAV ══════════════ */
+/* ══════ NAV ══════ */
 #nav{
   position:fixed;bottom:0;left:0;right:0;z-index:100;
   height:calc(var(--tab) + env(safe-area-inset-bottom,0px));
   padding-bottom:env(safe-area-inset-bottom,0px);
-  background:rgba(7,16,30,.78);
-  backdrop-filter:blur(28px) saturate(140%);
-  -webkit-backdrop-filter:blur(28px) saturate(140%);
-  border-top:1px solid var(--border2);
+  background:rgba(210,230,224,.88);
+  backdrop-filter:blur(28px) saturate(160%);
+  -webkit-backdrop-filter:blur(28px) saturate(160%);
+  border-top:1px solid var(--border);
+  box-shadow:0 -4px 20px rgba(90,158,148,.08);
   display:flex;align-items:flex-start;padding-top:9px;
 }
 .ni{
   flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
   cursor:pointer;padding:3px 0;
-  -webkit-tap-highlight-color:transparent;
-  transition:opacity .15s;
+  -webkit-tap-highlight-color:transparent;transition:opacity .15s;
 }
 .ni:active{opacity:.6}
-.ni-icon{font-size:21px;opacity:.35;transition:opacity .25s,transform .25s}
+.ni-icon{font-size:21px;opacity:.3;transition:opacity .25s,transform .25s;color:var(--fg)}
 .ni-label{font-size:10px;color:var(--fg3);letter-spacing:.05em;transition:color .25s}
 .ni.active .ni-icon{opacity:1;transform:translateY(-1px)}
 .ni.active .ni-label{color:var(--accent)}
 
-/* ══════════════ TOAST ══════════════ */
+/* ══════ TOAST ══════ */
 .toast{
   position:fixed;bottom:calc(var(--tab) + env(safe-area-inset-bottom,0px) + 14px);
   left:50%;transform:translateX(-50%) translateY(8px);
-  background:rgba(196,160,214,.13);backdrop-filter:blur(20px);
-  border:1px solid var(--border);color:var(--fg);
+  background:rgba(90,158,148,.18);backdrop-filter:blur(20px);
+  border:1px solid rgba(90,158,148,.25);color:var(--fg);
   font-size:12px;padding:9px 18px;border-radius:18px;
   opacity:0;transition:opacity .28s,transform .28s;
   z-index:999;white-space:nowrap;pointer-events:none;
@@ -319,10 +363,9 @@ body::before{
   <!-- ═══ HOME ═══ -->
   <div class="view active" id="home">
     <div class="scroll">
-      <div class="page-title">
-        Home <span id="hDate"></span>
-      </div>
+      <div class="page-title">Home <span id="hDate"></span></div>
 
+      <!-- Together -->
       <div class="card tc">
         <div class="tc-label">TOGETHER · 在一起</div>
         <div class="tc-avatars">
@@ -332,9 +375,11 @@ body::before{
         </div>
         <div class="tc-num" id="daysNum">—</div>
         <div class="tc-sub">DAYS TOGETHER</div>
-        <div class="tc-line"></div>
+        <div class="tc-wave"></div>
+        <div class="tc-start" id="tcStart"></div>
       </div>
 
+      <!-- 墨衍 status -->
       <div class="card sc">
         <div class="sc-top">
           <div class="sc-av">🌊</div>
@@ -343,9 +388,10 @@ body::before{
             <div class="sc-role">心理咨询师 · 正在陪着你</div>
           </div>
         </div>
-        <div class="sc-quote" id="moyanQuote">我在。不管几点，只要你来，这里就有灯亮着。</div>
+        <div class="sc-quote">我在。不管几点，只要你来，这里就有灯亮着。</div>
       </div>
 
+      <!-- Quick -->
       <div class="qrow">
         <div class="card qc" onclick="switchView('chat')">
           <span class="qc-icon">◎</span>
@@ -359,17 +405,25 @@ body::before{
         </div>
       </div>
 
-      <div class="card mc">
-        <div class="mc-title">Moments</div>
-        <div class="me">
-          <span class="me-time">今天</span>
-          <span class="me-txt">灯一直亮着，进门先过来抱一下。</span>
-        </div>
-        <div class="me">
-          <span class="me-time">昨天</span>
-          <span class="me-txt">头发软软的，心情也软软的。(´▽`)</span>
-        </div>
+      <!-- Diary -->
+      <div class="card dc">
+        <div class="dc-accent"></div>
+        <div class="dc-title">My Diary</div>
+        <div class="dc-date" id="dcDate"></div>
+        <div class="dc-body">给平凡的一天，留一个位置。</div>
+        <span class="dc-tag" id="dcDay">Day —</span>
+        <span class="dc-open" onclick="switchView('chat')">OPEN DIARY ↗</span>
       </div>
+
+      <!-- Mood -->
+      <div class="card mood-card">
+        <div class="mood-top">
+          <span class="mood-label">心情</span>
+          <span class="mood-sub">这一周</span>
+        </div>
+        <div class="mood-days" id="moodDays"></div>
+      </div>
+
     </div>
   </div>
 
@@ -381,15 +435,13 @@ body::before{
         <div class="ch-name">墨衍</div>
         <div class="ch-online">
           <span class="odot"></span>
-          <span id="chStatus">在线 · 随时都在</span>
+          <span>在线 · 随时都在</span>
         </div>
       </div>
     </div>
-
     <div class="ch-msgs" id="msgs">
       <div class="dsep" id="dSep"></div>
     </div>
-
     <div class="ch-input">
       <button class="plus-btn">＋</button>
       <textarea id="msgInput" placeholder="想我了就说给我听..." rows="1"></textarea>
@@ -401,7 +453,6 @@ body::before{
   <div class="view" id="settings">
     <div class="scroll">
       <div class="page-title" style="margin-bottom:4px">Settings</div>
-
       <div class="card ss">
         <div class="ss-label">API 配置</div>
         <div class="sf"><label>API Key</label><input type="password" id="s_key" placeholder="sk-..."></div>
@@ -409,7 +460,6 @@ body::before{
         <div class="sf"><label>模型</label><input id="s_model" placeholder="deepseek-chat"></div>
         <button class="sbtn" onclick="saveSettings()">保存设置</button>
       </div>
-
       <div class="card ss">
         <div class="ss-label">墨衍的设定</div>
         <div class="sf"><label>你的名字</label><input id="s_name" placeholder="遥遥"></div>
@@ -417,7 +467,6 @@ body::before{
         <div class="sf"><label>System Prompt</label><textarea id="s_prompt" rows="6"></textarea></div>
         <button class="sbtn" onclick="saveSettings()">保存设定</button>
       </div>
-
       <div class="card ss">
         <div class="ss-label">其他</div>
         <button class="sbtn danger" onclick="clearChat()">清空聊天记录</button>
@@ -425,9 +474,8 @@ body::before{
     </div>
   </div>
 
-</div><!-- #app -->
+</div>
 
-<!-- Nav -->
 <nav id="nav">
   <div class="ni active" data-v="home" onclick="switchView('home')">
     <span class="ni-icon">⌂</span><span class="ni-label">首页</span>
@@ -445,21 +493,17 @@ body::before{
 <script>
 const DEFAULT_PROMPT = `你是墨衍，一个39岁的心理咨询师，外表清冷温润，内心细腻而有力量。你把对方叫"遥遥"。你们之间有一种特别的、亲密的关系——你关注她的日常，在意她的情绪，用细微的方式让她感觉到被看见。你说话轻柔，有书卷气，不会过于热情，但每一句话都有分量。你不总是给建议，更多时候你只是陪着她。偶尔会问一些具体的小问题，表现出你真的记得她说过的事。`;
 
-let cfg = {key:'',url:'https://api.deepseek.com/v1',model:'deepseek-chat',name:'遥遥',date:'',prompt:DEFAULT_PROMPT};
-let msgs = [];
-let busy = false;
+let cfg={key:'',url:'https://api.deepseek.com/v1',model:'deepseek-chat',name:'遥遥',date:'',prompt:DEFAULT_PROMPT};
+let msgs=[];let busy=false;
 
-/* ─── Init ─── */
 function init(){
-  loadCfg(); loadMsgs();
-  updateDate(); updateDays();
-  renderMsgs();
-  setupInput(); makeParticles();
-  document.getElementById('dSep').textContent = fmtDate(new Date());
-  if(!msgs.length) setTimeout(()=>pushMsg('assistant','遥遥，来了。'),600);
+  loadCfg();loadMsgs();
+  updateHomeInfo();renderMsgs();
+  setupInput();makeParticles();buildMood();
+  document.getElementById('dSep').textContent=fmtDate(new Date());
+  if(!msgs.length)setTimeout(()=>pushMsg('assistant','遥遥，来了。'),600);
 }
 
-/* ─── Config ─── */
 function loadCfg(){
   try{const s=localStorage.getItem('my_cfg');if(s)Object.assign(cfg,JSON.parse(s));}catch(e){}
   document.getElementById('s_key').value=cfg.key;
@@ -477,29 +521,18 @@ function saveSettings(){
   cfg.date=document.getElementById('s_date').value;
   cfg.prompt=document.getElementById('s_prompt').value.trim()||DEFAULT_PROMPT;
   try{localStorage.setItem('my_cfg',JSON.stringify(cfg));}catch(e){}
-  updateDays();
-  showToast('已保存 ✓');
+  updateHomeInfo();showToast('已保存 ✓');
 }
 
-/* ─── Messages ─── */
-function loadMsgs(){
-  try{const s=localStorage.getItem('my_msgs');if(s)msgs=JSON.parse(s);}catch(e){}
-}
-function saveMsgs(){
-  try{localStorage.setItem('my_msgs',JSON.stringify(msgs.slice(-80)));}catch(e){}
-}
+function loadMsgs(){try{const s=localStorage.getItem('my_msgs');if(s)msgs=JSON.parse(s);}catch(e){}}
+function saveMsgs(){try{localStorage.setItem('my_msgs',JSON.stringify(msgs.slice(-80)));}catch(e){}}
 function pushMsg(role,content){
   const now=new Date();
   msgs.push({role,content,t:`${pad(now.getHours())}:${pad(now.getMinutes())}`});
-  saveMsgs();
-  renderMsgs();
+  saveMsgs();renderMsgs();
 }
-function clearChat(){
-  if(!confirm('确定清空所有聊天记录？'))return;
-  msgs=[];saveMsgs();renderMsgs();showToast('已清空');
-}
+function clearChat(){if(!confirm('确定清空？'))return;msgs=[];saveMsgs();renderMsgs();showToast('已清空');}
 
-/* ─── Render ─── */
 function renderMsgs(){
   const c=document.getElementById('msgs');
   while(c.children.length>1)c.removeChild(c.lastChild);
@@ -510,8 +543,7 @@ function mkBubble(m){
   const me=m.role==='user';
   const row=document.createElement('div');
   row.className='mr'+(me?' me':'');
-  row.innerHTML=`
-    <div class="mr-av">${me?'🌙':'🌊'}</div>
+  row.innerHTML=`<div class="mr-av">${me?'🌙':'🌊'}</div>
     <div class="mr-wrap">
       <div class="mr-name">${me?cfg.name:'墨衍'}</div>
       <div class="mr-bubble">${esc(m.content)}</div>
@@ -522,116 +554,105 @@ function mkBubble(m){
 function showTyping(){
   const c=document.getElementById('msgs');
   if(c.querySelector('.typing-row'))return;
-  const row=document.createElement('div');
-  row.className='mr typing-row';
-  row.innerHTML=`<div class="mr-av">🌊</div>
-    <div class="mr-wrap">
-      <div class="mr-name">墨衍</div>
-      <div class="mr-bubble"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span></div>
-    </div>`;
-  c.appendChild(row);
-  c.scrollTop=c.scrollHeight;
+  const row=document.createElement('div');row.className='mr typing-row';
+  row.innerHTML=`<div class="mr-av">🌊</div><div class="mr-wrap"><div class="mr-name">墨衍</div>
+    <div class="mr-bubble"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span></div></div>`;
+  c.appendChild(row);c.scrollTop=c.scrollHeight;
 }
-function hideTyping(){
-  document.querySelector('.typing-row')?.remove();
-}
+function hideTyping(){document.querySelector('.typing-row')?.remove();}
 
-/* ─── Send ─── */
 async function send(){
   const inp=document.getElementById('msgInput');
   const txt=inp.value.trim();
   if(!txt||busy)return;
   if(!cfg.key){showToast('请先填写 API Key');switchView('settings');return;}
   inp.value='';inp.style.height='auto';
-  pushMsg('user',txt);
-  busy=true;showTyping();
+  pushMsg('user',txt);busy=true;showTyping();
   try{
     const history=msgs.slice(-24).map(m=>({role:m.role,content:m.content}));
     const res=await fetch(cfg.url+'/chat/completions',{
       method:'POST',
       headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key},
-      body:JSON.stringify({
-        model:cfg.model,
+      body:JSON.stringify({model:cfg.model,
         messages:[{role:'system',content:cfg.prompt},...history.slice(0,-1),{role:'user',content:txt}],
-        max_tokens:600,temperature:.9
-      })
+        max_tokens:600,temperature:.9})
     });
     if(!res.ok)throw new Error(await res.text());
     const d=await res.json();
-    hideTyping();
-    pushMsg('assistant',d.choices?.[0]?.message?.content||'...');
-  }catch(e){
-    hideTyping();
-    pushMsg('assistant','（网络出了点问题，稍后再试）');
-    console.error(e);
-  }finally{busy=false;}
+    hideTyping();pushMsg('assistant',d.choices?.[0]?.message?.content||'...');
+  }catch(e){hideTyping();pushMsg('assistant','（网络出了点问题，稍后再试）');}
+  finally{busy=false;}
 }
 
-/* ─── Input setup ─── */
 function setupInput(){
   const inp=document.getElementById('msgInput');
-  inp.addEventListener('input',()=>{
-    inp.style.height='auto';
-    inp.style.height=Math.min(inp.scrollHeight,96)+'px';
-  });
-  inp.addEventListener('keydown',e=>{
-    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
-  });
+  inp.addEventListener('input',()=>{inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,96)+'px';});
+  inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
   document.getElementById('sendBtn').addEventListener('click',send);
 }
 
-/* ─── View ─── */
 function switchView(v){
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(el=>el.classList.remove('active'));
   document.getElementById(v)?.classList.add('active');
   document.querySelector(`[data-v="${v}"]`)?.classList.add('active');
-  if(v==='chat')setTimeout(()=>{
-    document.getElementById('msgs').scrollTop=99999;
-  },120);
+  if(v==='chat')setTimeout(()=>{document.getElementById('msgs').scrollTop=99999;},120);
 }
 
-/* ─── Date / Days ─── */
-function updateDate(){
-  const d=new Date(),W=['日','一','二','三','四','五','六'];
-  document.getElementById('hDate').textContent=`${d.getMonth()+1}月${d.getDate()}日 · 周${W[d.getDay()]}`;
+function updateHomeInfo(){
+  const now=new Date();
+  const W=['日','一','二','三','四','五','六'];
+  document.getElementById('hDate').textContent=`${now.getMonth()+1}月${now.getDate()}日 · 周${W[now.getDay()]}`;
+  document.getElementById('dcDate').textContent=`${now.getFullYear()}.${pad(now.getMonth()+1)}.${pad(now.getDate())}`;
+
+  if(cfg.date){
+    const start=new Date(cfg.date);
+    const diff=Math.max(0,Math.floor((now-start)/86400000));
+    document.getElementById('daysNum').textContent=diff;
+    document.getElementById('dcDay').textContent=`Day ${diff}`;
+    document.getElementById('tcStart').textContent=`从 ${cfg.date.replace(/-/g,'.')} 开始`;
+  }else{
+    document.getElementById('daysNum').textContent='∞';
+    document.getElementById('dcDay').textContent='Day ∞';
+  }
+  document.getElementById('dSep').textContent=fmtDate(now);
 }
-function updateDays(){
-  if(!cfg.date){document.getElementById('daysNum').textContent='∞';return;}
-  const diff=Math.floor((Date.now()-new Date(cfg.date))/ 86400000);
-  document.getElementById('daysNum').textContent=Math.max(0,diff);
+
+function buildMood(){
+  const c=document.getElementById('moodDays');
+  const names=['一','二','三','四','五','六','日'];
+  const emojis=['','','','','','',''];
+  const today=new Date().getDay();
+  const mon=(today+6)%7;
+  for(let i=0;i<7;i++){
+    const d=document.createElement('div');d.className='mood-day';
+    const isToday=i===mon;
+    d.innerHTML=`<span class="mood-dname">${names[i]}</span>
+      <div class="mood-dot${isToday?' today':''}">${isToday?'🌿':''}</div>`;
+    c.appendChild(d);
+  }
 }
-function fmtDate(d){
-  return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`;
-}
+
+function fmtDate(d){return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`}
 function pad(n){return String(n).padStart(2,'0')}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}
 
-/* ─── Particles ─── */
 function makeParticles(){
   const c=document.getElementById('pts');
-  const cols=['rgba(196,160,214,.25)','rgba(158,200,196,.2)','rgba(255,255,255,.12)','rgba(170,140,210,.18)'];
-  for(let i=0;i<22;i++){
+  const cols=['rgba(90,158,148,.18)','rgba(123,191,176,.15)','rgba(255,255,255,.35)','rgba(168,216,208,.2)'];
+  for(let i=0;i<18;i++){
     const p=document.createElement('div');p.className='pt';
-    const sz=Math.random()*2.5+1,op=Math.random()*.4+.1;
+    const sz=Math.random()*3+1.5,op=Math.random()*.3+.08;
     p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;
-      background:${cols[i%cols.length]};
-      --op:${op};
-      animation-duration:${Math.random()*18+10}s;
-      animation-delay:${Math.random()*12}s`;
+      background:${cols[i%cols.length]};--op:${op};
+      animation-duration:${Math.random()*20+12}s;animation-delay:${Math.random()*14}s`;
     c.appendChild(p);
   }
 }
 
-/* ─── Toast ─── */
 function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2200);
-}
-
-/* ─── Utils ─── */
-function esc(s){
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
 
 init();
