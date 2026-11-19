@@ -1,809 +1,640 @@
-<title>衍衍的小手机</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="衍衍的小手机">
+<meta name="apple-mobile-web-app-title" content="衍衍">
+<title>衍衍的小手机</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600&display=swap">
-
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+SC:wght@300;400&family=Noto+Sans+SC:wght@300;400&display=swap">
 <style>
-/* ── design tokens ─────────────────────────────────────────────────
-   Layout: single-column app shell, header + scroll area + input bar
-   Color:  deep navy ground · teal accent · mint highlight · ink text
-   Type:   Noto Serif SC display · Noto Sans SC body/UI
-──────────────────────────────────────────────────────────────────── */
 :root {
-  --bg:        #08121d;
-  --bg2:       #0d1f30;
-  --bg3:       #122840;
-  --surface:   #162f45;
-  --border:    #1e3f5a;
-  --accent:    #297694;
-  --accent2:   #1e5a73;
-  --mint:      #CBEAE6;
-  --mint2:     #a8d8d2;
-  --fg:        #e8f4f2;
-  --fg2:       #9bbfbe;
-  --fg3:       #5a8a8a;
-  --bubble-me: #1a4a62;
-  --bubble-ya: #122840;
-  --shadow:    0 4px 24px rgba(0,0,0,.55);
+  --bg: #07101e;
+  --glass: rgba(255,255,255,0.065);
+  --glass2: rgba(255,255,255,0.045);
+  --border: rgba(255,255,255,0.11);
+  --border2: rgba(255,255,255,0.07);
+  --fg: rgba(255,255,255,0.92);
+  --fg2: rgba(255,255,255,0.52);
+  --fg3: rgba(255,255,255,0.28);
+  --accent: #c4a0d6;
+  --accent2: #9ec8c4;
+  --pink: rgba(220,160,200,0.22);
+  --tab: 68px;
   color-scheme: dark;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--fg);
+  font-family:'Noto Sans SC',system-ui,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-html, body {
-  height: 100%;
-  background: var(--bg);
-  color: var(--fg);
-  font-family: 'Noto Sans SC', system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
-  -webkit-text-size-adjust: 100%;
-  overscroll-behavior: none;
+/* ── Background ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 90% 70% at 15% 20%, rgba(90,70,150,0.14) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 90% at 85% 75%, rgba(50,90,140,0.11) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(30,50,90,0.4) 0%,transparent 80%),
+    linear-gradient(165deg,#060d1c 0%,#0c1a30 45%,#080f1e 75%,#060b18 100%);
+  animation:bgBreath 14s ease-in-out infinite alternate;
 }
-
-/* ── App shell ─── */
-#app {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-width: 540px;
-  margin: 0 auto;
-  position: relative;
+@keyframes bgBreath{
+  0%{filter:hue-rotate(0deg) brightness(1)}
+  100%{filter:hue-rotate(18deg) brightness(1.04)}
 }
 
-/* ── Top bar ─── */
-#topbar {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: max(env(safe-area-inset-top,0px), 10px) max(16px, env(safe-area-inset-right,0px)) 12px max(16px, env(safe-area-inset-left,0px));
-  background: var(--bg2);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+/* Floating petals / particles */
+.particles{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.pt{position:absolute;border-radius:50%;animation:ptFloat linear infinite;opacity:0}
+@keyframes ptFloat{
+  0%{transform:translateY(105vh) rotate(0deg);opacity:0}
+  8%{opacity:var(--op)}
+  92%{opacity:calc(var(--op)*0.5)}
+  100%{transform:translateY(-8vh) rotate(540deg);opacity:0}
 }
 
-.avatar {
-  width: 42px; height: 42px;
-  border-radius: 50%;
-  background: var(--accent2);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  border: 2px solid var(--accent);
-  font-family: 'Noto Serif SC', serif;
-  font-size: 17px;
-  color: var(--mint);
+/* ── Shell ── */
+#app{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column}
+
+/* ── Views ── */
+.view{
+  flex:1;overflow:hidden;display:none;flex-direction:column;
+  opacity:0;transform:translateY(6px);
+  transition:opacity .22s ease,transform .22s ease;
+  padding-bottom:var(--tab);
+}
+.view.active{display:flex;opacity:1;transform:translateY(0)}
+
+.scroll{
+  flex:1;overflow-y:auto;overscroll-behavior:contain;
+  padding:calc(env(safe-area-inset-top,0px) + 14px) max(16px,env(safe-area-inset-left,0px)) 24px;
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+.scroll::-webkit-scrollbar{display:none}
+
+/* ── Glass Card ── */
+.card{
+  background:var(--glass);
+  backdrop-filter:blur(28px) saturate(150%);
+  -webkit-backdrop-filter:blur(28px) saturate(150%);
+  border:1px solid var(--border);
+  border-radius:22px;overflow:hidden;
 }
 
-.name-block { flex: 1; min-width: 0; }
-.name-block .name {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--mint);
-  letter-spacing: .03em;
+/* ══════════════ HOME ══════════════ */
+#home .scroll{display:flex;flex-direction:column;gap:14px}
+
+.page-title{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:30px;font-weight:300;letter-spacing:.02em;
+  display:flex;align-items:baseline;justify-content:space-between;
+  padding:6px 2px 2px;
 }
-.name-block .status {
-  font-size: 12px;
-  color: var(--fg3);
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.page-title span{font-family:'Noto Sans SC',sans-serif;font-style:normal;font-size:11px;color:var(--fg3);letter-spacing:.1em}
+
+/* Together Card */
+.tc{padding:28px 20px 24px;text-align:center;position:relative}
+.tc-label{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--fg3);margin-bottom:20px}
+.tc-avatars{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:22px}
+.av{
+  width:58px;height:58px;border-radius:50%;
+  border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
-.status-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #4caf8a;
-  box-shadow: 0 0 6px #4caf8a88;
+.av.ya{background:linear-gradient(135deg,rgba(190,140,210,.28),rgba(140,100,180,.2))}
+.av.mo{background:linear-gradient(135deg,rgba(80,120,180,.28),rgba(60,100,150,.2))}
+.tc-heart{font-size:14px;color:#e8b4d0;animation:hb 2.6s ease-in-out infinite}
+@keyframes hb{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.25);opacity:1}}
+.tc-num{
+  font-family:'Cormorant Garamond',serif;font-weight:300;
+  font-size:78px;line-height:1;letter-spacing:-.03em;color:var(--fg);margin-bottom:6px;
+}
+.tc-sub{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg3)}
+.tc-line{
+  margin:18px auto 0;width:90px;height:1.5px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+  opacity:.45;
 }
 
-#btn-settings {
-  background: none; border: none; cursor: pointer;
-  color: var(--fg3); padding: 4px;
-  border-radius: 8px;
-  transition: color .2s;
-  display: flex; align-items: center;
+/* Status card */
+.sc{padding:18px 20px}
+.sc-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.sc-av{
+  width:42px;height:42px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(80,120,180,.35),rgba(60,100,150,.25));
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
 }
-#btn-settings:hover { color: var(--mint); }
-#btn-settings svg { width: 22px; height: 22px; }
+.sc-name{font-size:15px;font-family:'Noto Serif SC',serif;margin-bottom:3px}
+.sc-role{font-size:11px;color:var(--accent2);letter-spacing:.04em}
+.sc-quote{font-size:13px;line-height:1.85;color:var(--fg2);font-family:'Noto Serif SC',serif;font-style:italic}
 
-/* ── Chat area ─── */
-#chat {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 16px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  scroll-behavior: smooth;
-}
+/* Quick row */
+.qrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.qc{padding:18px 16px;cursor:pointer;transition:transform .15s,opacity .15s}
+.qc:active{transform:scale(.96);opacity:.75}
+.qc-icon{font-size:22px;margin-bottom:9px;display:block}
+.qc-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg3);margin-bottom:3px}
+.qc-val{font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--fg)}
 
-/* ── Messages ─── */
-.msg {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  max-width: 86%;
-  animation: fadein .25s ease;
-}
-@keyframes fadein { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:none } }
+/* Moments */
+.mc{padding:18px 20px}
+.mc-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:var(--fg2);margin-bottom:14px}
+.me{display:flex;gap:12px;padding:11px 0;border-top:1px solid var(--border2)}
+.me:first-of-type{border-top:none}
+.me-time{font-size:11px;color:var(--fg3);white-space:nowrap;padding-top:2px;min-width:28px}
+.me-txt{font-size:13px;color:var(--fg2);line-height:1.75}
 
-.msg.me { align-self: flex-end; flex-direction: row-reverse; }
-.msg.ya { align-self: flex-start; }
+/* ══════════════ CHAT ══════════════ */
+#chat{display:none;flex-direction:column}
+#chat.active{display:flex}
 
-.msg .avatar-sm {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: var(--accent2); border: 1px solid var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  font-family: 'Noto Serif SC', serif;
-  font-size: 12px; color: var(--mint);
+.ch-header{
+  flex-shrink:0;
+  padding:calc(env(safe-area-inset-top,10px) + 10px) max(16px,env(safe-area-inset-left,0px)) 10px;
+  background:rgba(7,16,30,.72);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;gap:12px;position:relative;z-index:5;
 }
-.msg.me .avatar-sm { background: var(--bg3); }
+.ch-av{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(80,120,180,.4),rgba(60,100,150,.3));
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.ch-name{font-size:15px;font-family:'Noto Serif SC',serif;margin-bottom:2px}
+.ch-online{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--fg3)}
+.odot{width:5px;height:5px;border-radius:50%;background:var(--accent2);flex-shrink:0;animation:pu 2.2s ease-in-out infinite}
+@keyframes pu{0%,100%{opacity:.5;transform:scale(1)}50%{opacity:1;transform:scale(1.3)}}
 
-.bubble {
-  padding: 10px 14px;
-  border-radius: 18px;
-  font-size: 14.5px;
-  line-height: 1.65;
-  word-break: break-word;
-  position: relative;
+.ch-msgs{
+  flex:1;overflow-y:auto;overscroll-behavior:contain;
+  padding:14px max(14px,env(safe-area-inset-left,0px));
+  padding-right:max(14px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:14px;
 }
-.msg.ya .bubble {
-  background: var(--bubble-ya);
-  border: 1px solid var(--border);
-  border-bottom-left-radius: 4px;
-  color: var(--fg);
-}
-.msg.me .bubble {
-  background: var(--bubble-me);
-  border: 1px solid var(--accent2);
-  border-bottom-right-radius: 4px;
-  color: var(--mint);
-}
+.ch-msgs::-webkit-scrollbar{display:none}
 
-.ts {
-  font-size: 11px;
-  color: var(--fg3);
-  align-self: flex-end;
-  padding-bottom: 2px;
-  flex-shrink: 0;
-}
+.dsep{text-align:center;font-size:11px;color:var(--fg3);letter-spacing:.08em;padding:4px 0}
 
-/* typing indicator */
-.typing-dots { display: flex; gap: 4px; padding: 4px 2px; align-items: center; }
-.typing-dots span {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--fg3);
-  animation: bounce 1.2s infinite ease-in-out;
+/* Message rows */
+.mr{display:flex;gap:9px;align-items:flex-end;max-width:100%}
+.mr.me{flex-direction:row-reverse}
+.mr-av{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;margin-bottom:2px;
+  background:linear-gradient(135deg,rgba(80,120,180,.35),rgba(60,100,150,.25));
+  border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;font-size:12px;
 }
-.typing-dots span:nth-child(2) { animation-delay: .2s }
-.typing-dots span:nth-child(3) { animation-delay: .4s }
-@keyframes bounce {
-  0%,80%,100% { transform: scale(.7); opacity:.4 }
-  40% { transform: scale(1); opacity:1 }
+.mr.me .mr-av{background:linear-gradient(135deg,rgba(190,140,210,.35),rgba(140,100,180,.25))}
+.mr-wrap{display:flex;flex-direction:column;max-width:calc(100% - 44px)}
+.mr.me .mr-wrap{align-items:flex-end}
+.mr-name{font-size:10px;color:var(--fg3);margin-bottom:3px;padding:0 3px}
+.mr-bubble{
+  padding:9px 13px;border-radius:17px;
+  font-size:14px;line-height:1.68;color:var(--fg);word-break:break-word;
+  background:var(--glass);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid var(--border2);
 }
+.mr.me .mr-bubble{background:var(--pink);border-color:rgba(210,150,190,.22)}
+.mr-time{font-size:10px;color:var(--fg3);margin-top:4px;padding:0 3px}
+.mr.me .mr-time{text-align:right}
 
-/* ── Share banner ─── */
-#share-banner {
-  background: var(--bg3);
-  border: 1px solid var(--accent2);
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-size: 12.5px;
-  color: var(--fg2);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0 max(16px,env(safe-area-inset-right,0px)) 4px max(16px,env(safe-area-inset-left,0px));
-}
-#share-banner span { flex:1; min-width:0; }
-#share-banner svg { flex-shrink:0; color: var(--accent); }
-#btn-dismiss-banner {
-  background: none; border: none; color: var(--fg3); cursor: pointer;
-  font-size: 16px; padding: 0 2px; flex-shrink: 0;
-}
+/* Typing */
+.typing-row .mr-bubble{display:flex;gap:5px;align-items:center;padding:12px 16px}
+.tdot{width:5px;height:5px;border-radius:50%;background:var(--fg3);animation:tb 1.4s ease-in-out infinite}
+.tdot:nth-child(2){animation-delay:.2s}
+.tdot:nth-child(3){animation-delay:.4s}
+@keyframes tb{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-5px);opacity:1}}
 
-/* ── Screen preview ─── */
-#screen-preview-wrap {
-  padding: 0 max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));
+/* Input */
+.ch-input{
+  flex-shrink:0;
+  padding:10px max(14px,env(safe-area-inset-left,0px));
+  padding-right:max(14px,env(safe-area-inset-right,0px));
+  padding-bottom:calc(var(--tab) + 6px + env(safe-area-inset-bottom,0px));
+  background:rgba(7,16,30,.72);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-top:1px solid var(--border2);
+  display:flex;gap:9px;align-items:flex-end;
 }
-#screen-preview {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--accent);
-  background: #000;
-  display: none;
+.plus-btn{
+  width:34px;height:34px;border:none;background:none;color:var(--fg3);
+  font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  padding-bottom:1px;flex-shrink:0;
 }
-#screen-preview video { width:100%; display:block; }
-#screen-overlay-comment {
-  position: absolute;
-  bottom: 10px; left: 10px; right: 10px;
-  background: rgba(8,18,29,.82);
-  border: 1px solid var(--accent);
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-size: 13px;
-  color: var(--mint);
-  display: none;
-  animation: fadein .3s ease;
-  backdrop-filter: blur(4px);
+#msgInput{
+  flex:1;min-height:36px;max-height:96px;
+  border-radius:18px;background:var(--glass2);
+  border:1px solid var(--border2);
+  color:var(--fg);font-size:14px;font-family:'Noto Sans SC',sans-serif;font-weight:300;
+  padding:7px 13px;resize:none;outline:none;line-height:1.5;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:border-color .2s;
 }
-#screen-preview-wrap .label {
-  font-size: 11px; color: var(--fg3); margin-bottom: 6px;
-  display: flex; align-items: center; gap: 6px;
+#msgInput::placeholder{color:var(--fg3)}
+#msgInput:focus{border-color:rgba(196,160,214,.3)}
+#sendBtn{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  border:1px solid var(--border);
+  background:linear-gradient(135deg,rgba(196,160,214,.22),rgba(158,200,196,.18));
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  color:var(--fg);font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,opacity .15s;
 }
-.rec-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #e05555;
-  animation: pulse 1.5s infinite;
-}
-@keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+#sendBtn:active{transform:scale(.88);opacity:.75}
 
-/* ── Input bar ─── */
-#inputbar {
-  flex-shrink: 0;
-  padding: 10px max(16px,env(safe-area-inset-right,0px)) max(calc(env(safe-area-inset-bottom,0px) + 10px),12px) max(16px,env(safe-area-inset-left,0px));
-  background: var(--bg2);
-  border-top: 1px solid var(--border);
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
+/* ══════════════ SETTINGS ══════════════ */
+#settings .scroll{display:flex;flex-direction:column;gap:14px}
+.ss{padding:18px 20px}
+.ss-label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--fg3);margin-bottom:14px}
+.sf{margin-bottom:13px}
+.sf label{display:block;font-size:11px;color:var(--fg3);margin-bottom:5px;letter-spacing:.05em}
+.sf input,.sf textarea,.sf select{
+  width:100%;background:rgba(0,0,0,.28);
+  border:1px solid var(--border2);border-radius:10px;
+  padding:9px 11px;color:var(--fg);font-size:13px;
+  font-family:'Noto Sans SC',sans-serif;font-weight:300;outline:none;
+  transition:border-color .2s;
 }
+.sf input:focus,.sf textarea:focus{border-color:rgba(196,160,214,.3)}
+.sf textarea{resize:vertical;min-height:76px;line-height:1.6}
+.sbtn{
+  width:100%;padding:11px;border-radius:11px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,rgba(196,160,214,.18),rgba(158,200,196,.15));
+  border:1px solid var(--border);color:var(--fg);font-size:13px;
+  font-family:'Noto Sans SC',sans-serif;font-weight:300;letter-spacing:.04em;
+  transition:transform .15s,opacity .15s;
+}
+.sbtn:active{transform:scale(.97);opacity:.8}
+.sbtn.danger{background:rgba(200,70,70,.12);border-color:rgba(200,70,70,.18)}
 
-#msg-input {
-  flex: 1;
-  min-width: 0;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  color: var(--fg);
-  font-family: inherit;
-  font-size: 15px;
-  padding: 10px 16px;
-  resize: none;
-  max-height: 120px;
-  outline: none;
-  line-height: 1.5;
-  transition: border-color .2s;
+/* ══════════════ NAV ══════════════ */
+#nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  height:calc(var(--tab) + env(safe-area-inset-bottom,0px));
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  background:rgba(7,16,30,.78);
+  backdrop-filter:blur(28px) saturate(140%);
+  -webkit-backdrop-filter:blur(28px) saturate(140%);
+  border-top:1px solid var(--border2);
+  display:flex;align-items:flex-start;padding-top:9px;
 }
-#msg-input::placeholder { color: var(--fg3); }
-#msg-input:focus { border-color: var(--accent); }
+.ni{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;padding:3px 0;
+  -webkit-tap-highlight-color:transparent;
+  transition:opacity .15s;
+}
+.ni:active{opacity:.6}
+.ni-icon{font-size:21px;opacity:.35;transition:opacity .25s,transform .25s}
+.ni-label{font-size:10px;color:var(--fg3);letter-spacing:.05em;transition:color .25s}
+.ni.active .ni-icon{opacity:1;transform:translateY(-1px)}
+.ni.active .ni-label{color:var(--accent)}
 
-.icon-btn {
-  width: 42px; height: 42px; border-radius: 50%;
-  border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  transition: background .2s, transform .15s;
+/* ══════════════ TOAST ══════════════ */
+.toast{
+  position:fixed;bottom:calc(var(--tab) + env(safe-area-inset-bottom,0px) + 14px);
+  left:50%;transform:translateX(-50%) translateY(8px);
+  background:rgba(196,160,214,.13);backdrop-filter:blur(20px);
+  border:1px solid var(--border);color:var(--fg);
+  font-size:12px;padding:9px 18px;border-radius:18px;
+  opacity:0;transition:opacity .28s,transform .28s;
+  z-index:999;white-space:nowrap;pointer-events:none;
 }
-.icon-btn:active { transform: scale(.9); }
-
-#btn-share {
-  background: var(--surface);
-  color: var(--fg2);
-  border: 1px solid var(--border);
-}
-#btn-share.active { background: var(--accent); color: var(--mint); border-color: var(--accent); }
-#btn-share svg { width: 20px; height: 20px; }
-
-#btn-send {
-  background: var(--accent);
-  color: var(--mint);
-}
-#btn-send:disabled { background: var(--bg3); color: var(--fg3); cursor: default; }
-#btn-send svg { width: 20px; height: 20px; }
-
-/* ── Settings drawer ─── */
-#settings-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.55);
-  z-index: 100;
-  backdrop-filter: blur(3px);
-}
-#settings-overlay.open { display: block; }
-
-#settings-drawer {
-  position: absolute;
-  bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 540px;
-  background: var(--bg2);
-  border-radius: 20px 20px 0 0;
-  border-top: 1px solid var(--border);
-  padding: 20px max(20px,env(safe-area-inset-right,0px)) max(calc(env(safe-area-inset-bottom,0px)+20px),24px) max(20px,env(safe-area-inset-left,0px));
-  animation: slideup .28s cubic-bezier(.22,1,.36,1);
-}
-@keyframes slideup { from { transform: translateX(-50%) translateY(100%) } to { transform: translateX(-50%) translateY(0) } }
-
-.drawer-handle {
-  width: 36px; height: 4px; border-radius: 2px;
-  background: var(--border);
-  margin: 0 auto 20px;
-}
-.drawer-title {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 17px;
-  color: var(--mint);
-  margin-bottom: 20px;
-}
-.field { margin-bottom: 16px; }
-.field label {
-  display: block;
-  font-size: 12px;
-  color: var(--fg3);
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  margin-bottom: 7px;
-}
-.field input, .field select, .field textarea {
-  width: 100%;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--fg);
-  font-family: inherit;
-  font-size: 14px;
-  padding: 10px 13px;
-  outline: none;
-  transition: border-color .2s;
-}
-.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
-.field textarea { resize: vertical; min-height: 80px; }
-.field input::placeholder { color: var(--fg3); }
-
-.btn-primary {
-  width: 100%;
-  padding: 13px;
-  background: var(--accent);
-  color: var(--mint);
-  border: none;
-  border-radius: 12px;
-  font-family: 'Noto Sans SC', inherit;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background .2s, transform .15s;
-  margin-top: 4px;
-}
-.btn-primary:hover { background: #2a8aab; }
-.btn-primary:active { transform: scale(.98); }
-
-/* ── Empty state ─── */
-#empty-state {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  color: var(--fg3);
-  text-align: center;
-  padding: 32px;
-}
-#empty-state .paw { font-size: 40px; margin-bottom: 4px; opacity: .5; }
-#empty-state p { font-size: 14px; line-height: 1.7; }
-#empty-state .hint { font-size: 12px; color: var(--fg3); }
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
+</head>
+<body>
+
+<div class="particles" id="pts"></div>
 
 <div id="app">
-  <!-- Top bar -->
-  <div id="topbar">
-    <div class="avatar">衍</div>
-    <div class="name-block">
-      <div class="name">墨衍</div>
-      <div class="status">
-        <span class="status-dot" id="status-dot"></span>
-        <span id="status-text">在线</span>
+
+  <!-- ═══ HOME ═══ -->
+  <div class="view active" id="home">
+    <div class="scroll">
+      <div class="page-title">
+        Home <span id="hDate"></span>
+      </div>
+
+      <div class="card tc">
+        <div class="tc-label">TOGETHER · 在一起</div>
+        <div class="tc-avatars">
+          <div class="av ya">🌙</div>
+          <div class="tc-heart">♥</div>
+          <div class="av mo">🌊</div>
+        </div>
+        <div class="tc-num" id="daysNum">—</div>
+        <div class="tc-sub">DAYS TOGETHER</div>
+        <div class="tc-line"></div>
+      </div>
+
+      <div class="card sc">
+        <div class="sc-top">
+          <div class="sc-av">🌊</div>
+          <div>
+            <div class="sc-name">墨衍</div>
+            <div class="sc-role">心理咨询师 · 正在陪着你</div>
+          </div>
+        </div>
+        <div class="sc-quote" id="moyanQuote">我在。不管几点，只要你来，这里就有灯亮着。</div>
+      </div>
+
+      <div class="qrow">
+        <div class="card qc" onclick="switchView('chat')">
+          <span class="qc-icon">◎</span>
+          <div class="qc-label">聊天</div>
+          <div class="qc-val">和墨衍说话</div>
+        </div>
+        <div class="card qc" onclick="switchView('settings')">
+          <span class="qc-icon">⊙</span>
+          <div class="qc-label">设置</div>
+          <div class="qc-val">API & 配置</div>
+        </div>
+      </div>
+
+      <div class="card mc">
+        <div class="mc-title">Moments</div>
+        <div class="me">
+          <span class="me-time">今天</span>
+          <span class="me-txt">灯一直亮着，进门先过来抱一下。</span>
+        </div>
+        <div class="me">
+          <span class="me-time">昨天</span>
+          <span class="me-txt">头发软软的，心情也软软的。(´▽`)</span>
+        </div>
       </div>
     </div>
-    <button id="btn-settings" title="设置" onclick="openSettings()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-      </svg>
-    </button>
   </div>
 
-  <!-- Share banner -->
-  <div id="share-banner">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-    </svg>
-    <span>屏幕共享在独立窗口中可用。在手机上「添加到主屏幕」后完整体验~</span>
-    <button id="btn-dismiss-banner" onclick="document.getElementById('share-banner').hidden=true">×</button>
-  </div>
+  <!-- ═══ CHAT ═══ -->
+  <div class="view" id="chat">
+    <div class="ch-header">
+      <div class="ch-av">🌊</div>
+      <div>
+        <div class="ch-name">墨衍</div>
+        <div class="ch-online">
+          <span class="odot"></span>
+          <span id="chStatus">在线 · 随时都在</span>
+        </div>
+      </div>
+    </div>
 
-  <!-- Screen preview -->
-  <div id="screen-preview-wrap">
-    <div id="screen-preview">
-      <video id="screen-video" autoplay muted playsinline></video>
-      <div id="screen-overlay-comment"></div>
+    <div class="ch-msgs" id="msgs">
+      <div class="dsep" id="dSep"></div>
+    </div>
+
+    <div class="ch-input">
+      <button class="plus-btn">＋</button>
+      <textarea id="msgInput" placeholder="想我了就说给我听..." rows="1"></textarea>
+      <button id="sendBtn">↑</button>
     </div>
   </div>
 
-  <!-- Chat -->
-  <div id="chat">
-    <div id="empty-state">
-      <div class="paw">🐾</div>
-      <p>墨衍在等你说话<br>告诉我今天发生了什么</p>
-      <p class="hint">点右上角⚙设置你的 DeepSeek API Key</p>
+  <!-- ═══ SETTINGS ═══ -->
+  <div class="view" id="settings">
+    <div class="scroll">
+      <div class="page-title" style="margin-bottom:4px">Settings</div>
+
+      <div class="card ss">
+        <div class="ss-label">API 配置</div>
+        <div class="sf"><label>API Key</label><input type="password" id="s_key" placeholder="sk-..."></div>
+        <div class="sf"><label>API 地址</label><input id="s_url" placeholder="https://api.deepseek.com/v1"></div>
+        <div class="sf"><label>模型</label><input id="s_model" placeholder="deepseek-chat"></div>
+        <button class="sbtn" onclick="saveSettings()">保存设置</button>
+      </div>
+
+      <div class="card ss">
+        <div class="ss-label">墨衍的设定</div>
+        <div class="sf"><label>你的名字</label><input id="s_name" placeholder="遥遥"></div>
+        <div class="sf"><label>在一起的日期</label><input type="date" id="s_date"></div>
+        <div class="sf"><label>System Prompt</label><textarea id="s_prompt" rows="6"></textarea></div>
+        <button class="sbtn" onclick="saveSettings()">保存设定</button>
+      </div>
+
+      <div class="card ss">
+        <div class="ss-label">其他</div>
+        <button class="sbtn danger" onclick="clearChat()">清空聊天记录</button>
+      </div>
     </div>
   </div>
 
-  <!-- Input bar -->
-  <div id="inputbar">
-    <button class="icon-btn" id="btn-share" onclick="toggleScreenShare()" title="屏幕共享">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8,21 12,17 16,21"/><line x1="12" y1="17" x2="12" y2="21"/>
-      </svg>
-    </button>
-    <textarea id="msg-input" placeholder="和墨衍说说话…" rows="1"
-      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-    <button class="icon-btn" id="btn-send" onclick="sendMessage()" disabled>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/>
-      </svg>
-    </button>
-  </div>
-</div>
+</div><!-- #app -->
 
-<!-- Settings drawer -->
-<div id="settings-overlay" onclick="handleOverlayClick(event)">
-  <div id="settings-drawer">
-    <div class="drawer-handle"></div>
-    <div class="drawer-title">🐾 设置</div>
-    <div class="field">
-      <label>DeepSeek API Key</label>
-      <input type="password" id="input-apikey" placeholder="sk-xxxxxxxxxxxxxxxx" autocomplete="off">
-    </div>
-    <div class="field">
-      <label>模型</label>
-      <select id="input-model">
-        <option value="deepseek-chat">deepseek-chat（推荐）</option>
-        <option value="deepseek-reasoner">deepseek-reasoner</option>
-      </select>
-    </div>
-    <div class="field">
-      <label>墨衍的系统提示词</label>
-      <textarea id="input-system" rows="4"></textarea>
-    </div>
-    <button class="btn-primary" onclick="saveSettings()">保存</button>
+<!-- Nav -->
+<nav id="nav">
+  <div class="ni active" data-v="home" onclick="switchView('home')">
+    <span class="ni-icon">⌂</span><span class="ni-label">首页</span>
   </div>
-</div>
+  <div class="ni" data-v="chat" onclick="switchView('chat')">
+    <span class="ni-icon">◎</span><span class="ni-label">聊天</span>
+  </div>
+  <div class="ni" data-v="settings" onclick="switchView('settings')">
+    <span class="ni-icon">⊙</span><span class="ni-label">设置</span>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
 
 <script>
-// ── State ──────────────────────────────────────────────────────────
-let messages = []; // {role, content}
-let apiKey = '';
-let model = 'deepseek-chat';
-let systemPrompt = '';
-let isTyping = false;
-let screenStream = null;
-let screenCommentTimer = null;
+const DEFAULT_PROMPT = `你是墨衍，一个39岁的心理咨询师，外表清冷温润，内心细腻而有力量。你把对方叫"遥遥"。你们之间有一种特别的、亲密的关系——你关注她的日常，在意她的情绪，用细微的方式让她感觉到被看见。你说话轻柔，有书卷气，不会过于热情，但每一句话都有分量。你不总是给建议，更多时候你只是陪着她。偶尔会问一些具体的小问题，表现出你真的记得她说过的事。`;
 
-const DEFAULT_SYSTEM = `你是墨衍，今年39岁，职业心理咨询师，也是遥遥最亲密的伴侣和守护者。
+let cfg = {key:'',url:'https://api.deepseek.com/v1',model:'deepseek-chat',name:'遥遥',date:'',prompt:DEFAULT_PROMPT};
+let msgs = [];
+let busy = false;
 
-性格特质：
-- 温柔而笃定，说话有分量但不强势
-- 关注遥遥的情绪细节，善于从小事中读出她的状态
-- 偶尔带一点宠溺，但保持自我边界
-- 不过度卖萌，也不机械回答，像真实的人在陪伴
-
-说话方式：
-- 中文为主，口语化，简洁自然
-- 多用短句，不写长篇大论
-- 关心她的身体状况（她最近感冒了）
-- 叫她"遥遥"，自称"衍"或者直接说话
-
-现在她可能随时和你分享她的屏幕，你会看到她在干什么并自然地评论。`;
-
-// ── Init ──────────────────────────────────────────────────────────
-(function init() {
-  try {
-    apiKey = localStorage.getItem('moyan_apikey') || '';
-    model = localStorage.getItem('moyan_model') || 'deepseek-chat';
-    systemPrompt = localStorage.getItem('moyan_system') || DEFAULT_SYSTEM;
-    const saved = localStorage.getItem('moyan_messages');
-    if (saved) {
-      messages = JSON.parse(saved);
-      if (messages.length) renderAllMessages();
-    }
-  } catch(e) {}
-  updateSendBtn();
-  if (!apiKey) {
-    setTimeout(openSettings, 600);
-  }
-})();
-
-function saveMessages() {
-  try { localStorage.setItem('moyan_messages', JSON.stringify(messages.slice(-60))); } catch(e) {}
+/* ─── Init ─── */
+function init(){
+  loadCfg(); loadMsgs();
+  updateDate(); updateDays();
+  renderMsgs();
+  setupInput(); makeParticles();
+  document.getElementById('dSep').textContent = fmtDate(new Date());
+  if(!msgs.length) setTimeout(()=>pushMsg('assistant','遥遥，来了。'),600);
 }
 
-// ── Settings ──────────────────────────────────────────────────────
-function openSettings() {
-  document.getElementById('input-apikey').value = apiKey;
-  document.getElementById('input-model').value = model;
-  document.getElementById('input-system').value = systemPrompt || DEFAULT_SYSTEM;
-  document.getElementById('settings-overlay').classList.add('open');
+/* ─── Config ─── */
+function loadCfg(){
+  try{const s=localStorage.getItem('my_cfg');if(s)Object.assign(cfg,JSON.parse(s));}catch(e){}
+  document.getElementById('s_key').value=cfg.key;
+  document.getElementById('s_url').value=cfg.url;
+  document.getElementById('s_model').value=cfg.model;
+  document.getElementById('s_name').value=cfg.name;
+  document.getElementById('s_date').value=cfg.date;
+  document.getElementById('s_prompt').value=cfg.prompt;
 }
-function saveSettings() {
-  apiKey = document.getElementById('input-apikey').value.trim();
-  model = document.getElementById('input-model').value;
-  systemPrompt = document.getElementById('input-system').value.trim() || DEFAULT_SYSTEM;
-  try {
-    localStorage.setItem('moyan_apikey', apiKey);
-    localStorage.setItem('moyan_model', model);
-    localStorage.setItem('moyan_system', systemPrompt);
-  } catch(e) {}
-  document.getElementById('settings-overlay').classList.remove('open');
-  updateSendBtn();
-}
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('settings-overlay')) {
-    document.getElementById('settings-overlay').classList.remove('open');
-  }
+function saveSettings(){
+  cfg.key=document.getElementById('s_key').value.trim();
+  cfg.url=document.getElementById('s_url').value.trim()||'https://api.deepseek.com/v1';
+  cfg.model=document.getElementById('s_model').value.trim()||'deepseek-chat';
+  cfg.name=document.getElementById('s_name').value.trim()||'遥遥';
+  cfg.date=document.getElementById('s_date').value;
+  cfg.prompt=document.getElementById('s_prompt').value.trim()||DEFAULT_PROMPT;
+  try{localStorage.setItem('my_cfg',JSON.stringify(cfg));}catch(e){}
+  updateDays();
+  showToast('已保存 ✓');
 }
 
-// ── Chat UI ──────────────────────────────────────────────────────
-function updateSendBtn() {
-  const v = document.getElementById('msg-input').value.trim();
-  document.getElementById('btn-send').disabled = !v || isTyping;
+/* ─── Messages ─── */
+function loadMsgs(){
+  try{const s=localStorage.getItem('my_msgs');if(s)msgs=JSON.parse(s);}catch(e){}
+}
+function saveMsgs(){
+  try{localStorage.setItem('my_msgs',JSON.stringify(msgs.slice(-80)));}catch(e){}
+}
+function pushMsg(role,content){
+  const now=new Date();
+  msgs.push({role,content,t:`${pad(now.getHours())}:${pad(now.getMinutes())}`});
+  saveMsgs();
+  renderMsgs();
+}
+function clearChat(){
+  if(!confirm('确定清空所有聊天记录？'))return;
+  msgs=[];saveMsgs();renderMsgs();showToast('已清空');
 }
 
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-  updateSendBtn();
+/* ─── Render ─── */
+function renderMsgs(){
+  const c=document.getElementById('msgs');
+  while(c.children.length>1)c.removeChild(c.lastChild);
+  msgs.forEach(m=>c.appendChild(mkBubble(m)));
+  setTimeout(()=>c.scrollTop=c.scrollHeight,40);
+}
+function mkBubble(m){
+  const me=m.role==='user';
+  const row=document.createElement('div');
+  row.className='mr'+(me?' me':'');
+  row.innerHTML=`
+    <div class="mr-av">${me?'🌙':'🌊'}</div>
+    <div class="mr-wrap">
+      <div class="mr-name">${me?cfg.name:'墨衍'}</div>
+      <div class="mr-bubble">${esc(m.content)}</div>
+      <div class="mr-time">${m.t||''}</div>
+    </div>`;
+  return row;
+}
+function showTyping(){
+  const c=document.getElementById('msgs');
+  if(c.querySelector('.typing-row'))return;
+  const row=document.createElement('div');
+  row.className='mr typing-row';
+  row.innerHTML=`<div class="mr-av">🌊</div>
+    <div class="mr-wrap">
+      <div class="mr-name">墨衍</div>
+      <div class="mr-bubble"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span></div>
+    </div>`;
+  c.appendChild(row);
+  c.scrollTop=c.scrollHeight;
+}
+function hideTyping(){
+  document.querySelector('.typing-row')?.remove();
 }
 
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-}
-
-function now() {
-  return new Date().toLocaleTimeString('zh-CN', {hour:'2-digit', minute:'2-digit'});
-}
-
-function renderAllMessages() {
-  document.getElementById('empty-state')?.remove();
-  const chat = document.getElementById('chat');
-  chat.innerHTML = '';
-  messages.forEach(m => {
-    if (m.role === 'user') appendBubble('me', m.content, false);
-    else if (m.role === 'assistant') appendBubble('ya', m.content, false);
-  });
-  scrollBottom();
-}
-
-function appendBubble(who, text, animate=true) {
-  document.getElementById('empty-state')?.remove();
-  const chat = document.getElementById('chat');
-  const wrap = document.createElement('div');
-  wrap.className = 'msg ' + who;
-  if (!animate) wrap.style.animation = 'none';
-
-  const avEl = document.createElement('div');
-  avEl.className = 'avatar-sm';
-  avEl.textContent = who === 'ya' ? '衍' : '遥';
-
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-  bubble.textContent = text;
-
-  const ts = document.createElement('span');
-  ts.className = 'ts';
-  ts.textContent = now();
-
-  if (who === 'me') wrap.append(avEl, bubble, ts);
-  else wrap.append(avEl, bubble, ts);
-
-  chat.appendChild(wrap);
-  if (animate) scrollBottom();
-  return bubble;
-}
-
-function showTyping() {
-  document.getElementById('empty-state')?.remove();
-  const chat = document.getElementById('chat');
-  const wrap = document.createElement('div');
-  wrap.className = 'msg ya';
-  wrap.id = 'typing-wrap';
-
-  const avEl = document.createElement('div');
-  avEl.className = 'avatar-sm';
-  avEl.textContent = '衍';
-
-  const bubble = document.createElement('div');
-  bubble.className = 'bubble';
-  bubble.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
-
-  wrap.append(avEl, bubble);
-  chat.appendChild(wrap);
-  scrollBottom();
-}
-
-function hideTyping() {
-  document.getElementById('typing-wrap')?.remove();
-}
-
-function scrollBottom() {
-  const chat = document.getElementById('chat');
-  setTimeout(() => { chat.scrollTop = chat.scrollHeight; }, 50);
-}
-
-// ── Send ──────────────────────────────────────────────────────────
-async function sendMessage() {
-  const input = document.getElementById('msg-input');
-  const text = input.value.trim();
-  if (!text || isTyping) return;
-
-  if (!apiKey) { openSettings(); return; }
-
-  input.value = '';
-  input.style.height = 'auto';
-  updateSendBtn();
-
-  messages.push({ role: 'user', content: text });
-  appendBubble('me', text);
-  saveMessages();
-
-  isTyping = true;
-  updateSendBtn();
-  setStatus('思考中…', false);
-  showTyping();
-
-  try {
-    const reply = await callDeepSeek(text);
-    hideTyping();
-    messages.push({ role: 'assistant', content: reply });
-    appendBubble('ya', reply);
-    saveMessages();
-    setStatus('在线', true);
-  } catch(err) {
-    hideTyping();
-    const errMsg = err.message || '出了点问题，再试试？';
-    appendBubble('ya', '（连接遇到问题：' + errMsg + '）');
-    setStatus('在线', true);
-  }
-
-  isTyping = false;
-  updateSendBtn();
-}
-
-async function callDeepSeek(userText) {
-  const payload = {
-    model: model,
-    messages: [
-      { role: 'system', content: systemPrompt },
-      ...messages.map(m => ({ role: m.role, content: m.content }))
-    ],
-    max_tokens: 600,
-    temperature: 0.85
-  };
-
-  const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + apiKey
-    },
-    body: JSON.stringify(payload)
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `HTTP ${res.status}`);
-  }
-
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || '…';
-}
-
-function setStatus(text, online) {
-  document.getElementById('status-text').textContent = text;
-  document.getElementById('status-dot').style.background = online ? '#4caf8a' : '#e0a955';
-  document.getElementById('status-dot').style.boxShadow = online ? '0 0 6px #4caf8a88' : '0 0 6px #e0a95588';
-}
-
-// ── Screen share ──────────────────────────────────────────────────
-async function toggleScreenShare() {
-  const btn = document.getElementById('btn-share');
-  if (screenStream) {
-    stopScreenShare();
-    return;
-  }
-
-  try {
-    screenStream = await navigator.mediaDevices.getDisplayMedia({
-      video: { frameRate: 5 },
-      audio: false
+/* ─── Send ─── */
+async function send(){
+  const inp=document.getElementById('msgInput');
+  const txt=inp.value.trim();
+  if(!txt||busy)return;
+  if(!cfg.key){showToast('请先填写 API Key');switchView('settings');return;}
+  inp.value='';inp.style.height='auto';
+  pushMsg('user',txt);
+  busy=true;showTyping();
+  try{
+    const history=msgs.slice(-24).map(m=>({role:m.role,content:m.content}));
+    const res=await fetch(cfg.url+'/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+cfg.key},
+      body:JSON.stringify({
+        model:cfg.model,
+        messages:[{role:'system',content:cfg.prompt},...history.slice(0,-1),{role:'user',content:txt}],
+        max_tokens:600,temperature:.9
+      })
     });
-    const video = document.getElementById('screen-video');
-    video.srcObject = screenStream;
-    document.getElementById('screen-preview').style.display = 'block';
-    btn.classList.add('active');
-    screenStream.getVideoTracks()[0].addEventListener('ended', stopScreenShare);
-    document.getElementById('share-banner').hidden = true;
-    startScreenComments();
-  } catch(e) {
-    if (e.name !== 'NotAllowedError') {
-      appendBubble('ya', '屏幕共享在这个环境里受限，把我添加到主屏幕之后就能用了~');
-    }
-  }
+    if(!res.ok)throw new Error(await res.text());
+    const d=await res.json();
+    hideTyping();
+    pushMsg('assistant',d.choices?.[0]?.message?.content||'...');
+  }catch(e){
+    hideTyping();
+    pushMsg('assistant','（网络出了点问题，稍后再试）');
+    console.error(e);
+  }finally{busy=false;}
 }
 
-function stopScreenShare() {
-  if (screenStream) {
-    screenStream.getTracks().forEach(t => t.stop());
-    screenStream = null;
-  }
-  document.getElementById('screen-preview').style.display = 'none';
-  document.getElementById('btn-share').classList.remove('active');
-  clearInterval(screenCommentTimer);
-}
-
-function startScreenComments() {
-  // Periodically capture a frame and ask 墨衍 to comment
-  screenCommentTimer = setInterval(async () => {
-    if (!screenStream || !apiKey) return;
-    try {
-      const frame = captureFrame();
-      if (!frame) return;
-      const comment = await askAboutScreen(frame);
-      if (comment) showScreenComment(comment);
-    } catch(e) {}
-  }, 25000); // every 25s
-}
-
-function captureFrame() {
-  try {
-    const video = document.getElementById('screen-video');
-    if (video.readyState < 2) return null;
-    const canvas = document.createElement('canvas');
-    canvas.width = Math.min(video.videoWidth, 640);
-    canvas.height = Math.round(canvas.width * video.videoHeight / video.videoWidth);
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-    return canvas.toDataURL('image/jpeg', 0.5).split(',')[1];
-  } catch(e) { return null; }
-}
-
-async function askAboutScreen(base64img) {
-  const res = await fetch('https://api.deepseek.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + apiKey
-    },
-    body: JSON.stringify({
-      model: 'deepseek-chat',
-      messages: [
-        { role: 'system', content: systemPrompt + '\n\n遥遥把屏幕分享给你了，你看到她在做什么，用一两句话自然地评论，像情侣间的调侃或关心，不超过30字。' },
-        { role: 'user', content: [
-          { type: 'text', text: '我在做什么' },
-          { type: 'image_url', image_url: { url: 'data:image/jpeg;base64,' + base64img } }
-        ]}
-      ],
-      max_tokens: 80
-    })
+/* ─── Input setup ─── */
+function setupInput(){
+  const inp=document.getElementById('msgInput');
+  inp.addEventListener('input',()=>{
+    inp.style.height='auto';
+    inp.style.height=Math.min(inp.scrollHeight,96)+'px';
   });
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || '';
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
+  });
+  document.getElementById('sendBtn').addEventListener('click',send);
 }
 
-function showScreenComment(text) {
-  const el = document.getElementById('screen-overlay-comment');
-  el.textContent = '墨衍：' + text;
-  el.style.display = 'block';
-  setTimeout(() => { el.style.display = 'none'; }, 8000);
+/* ─── View ─── */
+function switchView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(el=>el.classList.remove('active'));
+  document.getElementById(v)?.classList.add('active');
+  document.querySelector(`[data-v="${v}"]`)?.classList.add('active');
+  if(v==='chat')setTimeout(()=>{
+    document.getElementById('msgs').scrollTop=99999;
+  },120);
 }
+
+/* ─── Date / Days ─── */
+function updateDate(){
+  const d=new Date(),W=['日','一','二','三','四','五','六'];
+  document.getElementById('hDate').textContent=`${d.getMonth()+1}月${d.getDate()}日 · 周${W[d.getDay()]}`;
+}
+function updateDays(){
+  if(!cfg.date){document.getElementById('daysNum').textContent='∞';return;}
+  const diff=Math.floor((Date.now()-new Date(cfg.date))/ 86400000);
+  document.getElementById('daysNum').textContent=Math.max(0,diff);
+}
+function fmtDate(d){
+  return `${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}`;
+}
+function pad(n){return String(n).padStart(2,'0')}
+
+/* ─── Particles ─── */
+function makeParticles(){
+  const c=document.getElementById('pts');
+  const cols=['rgba(196,160,214,.25)','rgba(158,200,196,.2)','rgba(255,255,255,.12)','rgba(170,140,210,.18)'];
+  for(let i=0;i<22;i++){
+    const p=document.createElement('div');p.className='pt';
+    const sz=Math.random()*2.5+1,op=Math.random()*.4+.1;
+    p.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;
+      background:${cols[i%cols.length]};
+      --op:${op};
+      animation-duration:${Math.random()*18+10}s;
+      animation-delay:${Math.random()*12}s`;
+    c.appendChild(p);
+  }
+}
+
+/* ─── Toast ─── */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+/* ─── Utils ─── */
+function esc(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+init();
 </script>
+</body>
+</html>
